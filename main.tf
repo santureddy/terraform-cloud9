@@ -11,7 +11,7 @@ terraform {
 provider "docker" {}
 
 resource "docker_image" "nodered_image" {
-  name = "nodered/node-red"
+  name = var.image[terraform.workspace]
 }
 
 resource "random_string" "random" {
@@ -34,7 +34,7 @@ resource "docker_container" "nodered_container" {
   ports {
     internal = 1880
     #external = 1880
-    external = lookup(var.ext_port, var.env)[count.index]
+    external = lookup(var.ext_port, terraform.workspace)[count.index]
   }
   volumes {
     container_path = "/data"
