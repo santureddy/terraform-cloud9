@@ -1,18 +1,8 @@
-terraform {
-  required_providers {
 
-    docker = {
-      source = "kreuzwerker/docker"
-    }
-
-  }
+module "image" {
+  source = "./image"
 }
 
-provider "docker" {}
-
-resource "docker_image" "nodered_image" {
-  name = var.image[terraform.workspace]
-}
 
 resource "random_string" "random" {
   count   = local.container_count
@@ -29,7 +19,7 @@ resource "null_resource" "dockervol" {
 
 resource "docker_container" "nodered_container" {
   count = local.container_count
-  image = docker_image.nodered_image.latest
+  image = module.image.image_out
   name  = join("-", ["nodered", random_string.random[count.index].result])
   ports {
     internal = 1880
