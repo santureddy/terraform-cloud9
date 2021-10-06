@@ -18,19 +18,16 @@ resource "null_resource" "dockervol" {
 
 }
 
-resource "docker_container" "nodered_container" {
+module "container" {
+  source = "./container"
+  depends_on = [null_resource.dockervol]
   count = local.container_count
-  image = module.image.image_out
-  name  = join("-", ["nodered", random_string.random[count.index].result])
-  ports {
-    internal = 1880
+  image_in = module.image.image_out
+  name_in  = join("-", ["nodered", random_string.random[count.index].result])
+  int_port_in = 1880
     #external = 1880
-    external = var.ext_port[terraform.workspace][count.index]
-  }
-  volumes {
-    container_path = "/data"
-    host_path      = "${path.cwd}/noderedvol"
-
-  }
+  ext_port_in = var.ext_port[terraform.workspace][count.index]
+  container_path_in = "/data"
+  host_path_in      = "${path.cwd}/noderedvol"
 }
 
