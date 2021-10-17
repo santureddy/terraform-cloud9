@@ -2,9 +2,16 @@ locals {
   deployment = {
     nodered = {
       image = var.image["nodered"][terraform.workspace]
-    } 
+      int = 1880
+      ext = var.ext_port["nodered"][terraform.workspace]
+      container_path = "/data"
+
+    }
     influxdb = {
       image = var.image["influxdb"][terraform.workspace]
+      int = 8086
+      ext = var.ext_port["influxdb"][terraform.workspace]
+      container_path = "/var/lib/influxdb"
     }
   }
 }
@@ -17,20 +24,20 @@ module "image" {
 }
 
 resource "random_string" "random" {
-  count   = local.container_count
+  for_each = local.deployment
   length  = 4
   special = false
 }
 
 module "container" {
   source      = "./container"
-  count       = local.container_count
-  image_in    = module.image["nodered"].image_out
-  name_in     = join("-", ["nodered", random_string.random[count.index].result])
-  int_port_in = 1880
+  for_each = local.deployment
+  image_in    = module.image[each.key].image_out
+  name_in     = join("-", [each.key, random_string.random[each.key].result])
+  int_port_in = each.value.int
   #external = 1880
-  ext_port_in       = var.ext_port[terraform.workspace][count.index]
-  container_path_in = "/data"
+  ext_port_in       = each.value.ext[0]
+  container_path_in = each.value.container_path
 
 }
 

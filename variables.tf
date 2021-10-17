@@ -17,19 +17,19 @@ variable "image" {
   description = "Image for containers"
   default = {
     nodered = {
-    dev  = "nodered/node-red:latest"
-    prod = "nodered/node-red:latest-minimal"
+      dev  = "nodered/node-red:latest"
+      prod = "nodered/node-red:latest-minimal"
     }
     influxdb = {
-    dev  = "quay.io/influxdb/influxdb:v2.0.2"
-    prod = "quay.io/influxdb/influxdb:v2.0.2"
-    
+      dev  = "quay.io/influxdb/influxdb:v2.0.2"
+      prod = "quay.io/influxdb/influxdb:v2.0.2"
+
     }
-    
+
   }
 
 }
 
-locals {
-  container_count = length(var.ext_port[terraform.workspace])
-}
+# locals {
+#   container_count = length(var.ext_port[terraform.workspace])
+# }
