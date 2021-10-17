@@ -6,10 +6,10 @@
 
 variable "ext_port" {
   type = map(any)
-  validation {
-    condition     = max(var.ext_port["dev"]...) < 1885 && min(var.ext_port["dev"]...) > 1879
-    error_message = "Ext_port should be 1880-1885."
-  }
+  # validation {
+  #   condition     = max(var.ext_port["dev"]...) < 1885 && min(var.ext_port["dev"]...) > 1879
+  #   error_message = "Ext_port should be 1880-1885."
+  # }
 }
 
 variable "image" {
