@@ -4,7 +4,7 @@ resource "random_string" "random" {
   special  = false
 }
 
-resource "docker_container" "nodered_container" {
+resource "docker_container" "app_container" {
   count = var.count_in
   image = var.image_in
   name  = join("-", [var.name_in, random_string.random[count.index].result])
