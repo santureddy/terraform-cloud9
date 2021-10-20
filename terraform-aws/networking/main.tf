@@ -16,7 +16,7 @@ resource "aws_vpc" "santy_vpc" {
 resource "aws_subnet" "santy_subnet_public" {
   count                   = length(var.public_cidrs)
   vpc_id                  = aws_vpc.santy_vpc.id
-  cidr_block              = var.public_cidrs[count]
+  cidr_block              = var.public_cidrs[count.index]
   map_public_ip_on_launch = true
   availability_zone       = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"][count.index]
   tags = {
