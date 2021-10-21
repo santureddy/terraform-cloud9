@@ -14,7 +14,7 @@ resource "aws_vpc" "santy_vpc" {
 }
 
 resource "aws_subnet" "santy_subnet_public" {
-  count                   = length(var.public_cidrs)
+  count                   = length(var.public_sn_count)
   vpc_id                  = aws_vpc.santy_vpc.id
   cidr_block              = var.public_cidrs[count.index]
   map_public_ip_on_launch = true
@@ -25,7 +25,7 @@ resource "aws_subnet" "santy_subnet_public" {
 }
 
 esource "aws_subnet" "santy_subnet_private" {
-  count                   = length(var.private_cidrs)
+  count                   = length(var.private_sn_count)
   vpc_id                  = aws_vpc.santy_vpc.id
   cidr_block              = var.private_cidrs[count.index]
   availability_zone       = ["us-west-2a", "us-west-2b", "us-west-2c", "us-west-2d"][count.index]
